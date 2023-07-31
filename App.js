@@ -12,8 +12,9 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={{paddingTop:Platform.OS==="android" && 30}}>
-        <Text style={styles.text}>Hola perro!</Text>
-        <Header time={time}/>
+        <Text style={styles.text}>Pomodoro</Text>
+        <Text style={styles.text}>{time}</Text>
+        <Header setTime={setTime} currentTime={currentTime} setCurrentTime={setCurrentTime}/>
       </View>
     </SafeAreaView>
   );
