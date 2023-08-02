@@ -31,7 +31,7 @@ export default Header;
 
 const styles = StyleSheet.create({
   itemStyle: {
-    width: "33%",
+    width: "33",
     borderWidth: 3,
     padding: 5,
   },
