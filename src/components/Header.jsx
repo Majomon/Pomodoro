@@ -20,7 +20,7 @@ function Header({ currentTime, setCurrentTime, setTime }) {
             currentTime !== index && { borderColor: "transparent" },
           ]}
         >
-          <Text>{item}</Text>
+          <Text style={{fontWeight:"bold"}}>{item}</Text>
         </TouchableOpacity>
       ))}
     </View>
@@ -32,7 +32,11 @@ export default Header;
 const styles = StyleSheet.create({
   itemStyle: {
     width: "33%",
+    alignItems:"center",
     borderWidth: 3,
     padding: 5,
+    borderRadius:10,
+    borderColor:"white",
+    marginVertical:20
   },
 });
