@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./src/components/Header";
 import Timer from "./src/components/Timer";
-import {Audio} from "expo-av"
+import { Audio } from "expo-av";
 
 const colors = ["#F7DC6F", "#A2D9CE", "#D7BDE2"];
 
@@ -19,9 +19,38 @@ export default function App() {
   const [currentTime, setCurrentTime] = useState("Pomo" | "Short" | "Break");
   const [isActive, setIsActive] = useState(false);
 
-  const handleStartStop=()=>{
-    setIsActive(!isActive)
-  }
+  useEffect(() => {
+    let interval = null;
+    if (isActive) {
+      //Corre el tiempo
+      interval = setInterval(() => {
+        setTime(time - 1);
+      }, 1000);
+    } else {
+      //Limpiar el interval
+      clearInterval(interval);
+    }
+
+    if (time === 0) {
+      setIsActive(false);
+      setIsWorking((prev) => !prev);
+      setTime(isWorking ? 300 : 1500);
+    }
+    return () => clearInterval(interval);
+  }, [isActive, time]);
+
+  const handleStartStop = () => {
+    playSound();
+    setIsActive(!isActive);
+  };
+
+  const playSound = async () => {
+    const { sound } = await Audio.Sound.createAsync(
+      require("./assets/audio/Click.mp3")
+    );
+    await sound.playAsync();
+  };
+
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: colors[currentTime] }]}
@@ -41,7 +70,9 @@ export default function App() {
         />
         <Timer time={time} />
         <TouchableOpacity onPress={handleStartStop} style={styles.button}>
-          <Text style={{color:"white", fontWeight:"bold"}}>{isActive ? "STOP" : "START"}</Text>
+          <Text style={{ color: "white", fontWeight: "bold" }}>
+            {isActive ? "STOP" : "START"}
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -56,11 +87,11 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "bold",
   },
-  button:{
-    alignItems:"center",
-    backgroundColor:"#333333",
-    padding:15,
-    marginTop:15,
-    borderRadius:15
-  }
+  button: {
+    alignItems: "center",
+    backgroundColor: "#333333",
+    padding: 15,
+    marginTop: 15,
+    borderRadius: 15,
+  },
 });
